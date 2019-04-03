@@ -1,12 +1,14 @@
-import Vue from 'vue';
-import router from './router';
-import App from './App';
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
+import Vue from 'vue'
+import router from './router'
+import App from './App'
+import ElementUI from 'element-ui'
+import HighchartsVue from 'highcharts-vue'
+import 'element-ui/lib/theme-chalk/index.css'
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = false
 
-Vue.use(ElementUI);
+Vue.use(ElementUI)
+Vue.use(HighchartsVue)
 /* eslint-disable no-new */
 // new Vue({
 //   data () {
@@ -22,4 +24,4 @@ new Vue({
   el: '#app',
   render: h => h(App),
   router
-});
+})

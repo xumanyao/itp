@@ -9,15 +9,24 @@
 </template>
 
 <script>
-  import {ipcRenderer} from 'electron';
-  ipcRenderer.on('goLit', (e, msg) => {
+  import {ipcRenderer} from 'electron'
+
+  ipcRenderer.on('goList', (e, msg) => {
     if (msg) {
-      window.location.hash = '#/list';
+      console.log(msg)
+      window.location.hash = '#/list'
     }
-  });
+  })
+  ipcRenderer.on('goType', (e, msg) => {
+    if (msg) {
+      console.log(msg)
+      window.location.hash = '#/type'
+    }
+  })
+
   export default {
     name: 'MainPage'
-  };
+  }
 </script>
 
 <style scoped>
@@ -29,6 +38,7 @@
     .inner {
         display: inline-block;
     }
+
     .title {
         text-align: center;
         color: #5E8479;
