@@ -92,6 +92,7 @@
         margin-top: 20px;
         display: flex;
         justify-content: center;
+        font-weight: bold !important;
     }
 
     .table-wrapper {

@@ -1,9 +1,11 @@
 <template>
     <div class="container">
         <div class="inner">
-            <div class="logo"><img style="width: 426px;height: 304px" src="../../../../static/img/logo.png" alt="">
+            <div class="logo" v-show="state === 1">
+                <img style="width: 426px;height: 304px" src="../../../../static/img/logo.png"/>
             </div>
-            <div class="title">欢迎使用综合测试平台</div>
+            <div class="use" v-show="state === 2"></div>
+            <div class="feedback" v-show="state === 3"></div>
         </div>
     </div>
 </template>
@@ -23,9 +25,29 @@
       window.location.hash = '#/type'
     }
   })
+  ipcRenderer.on('infoType', (e, type) => {
+    console.log(type)
+  })
 
   export default {
-    name: 'MainPage'
+    name: 'MainPage',
+    created () {
+      ipcRenderer.on('infoType', (e, type) => {
+        console.log(type)
+        switch (type) {
+          case 'useText':
+            this.state = 2
+            break
+          case 'feedback':
+            this.state = 3
+        }
+      })
+    },
+    data () {
+      return {
+        state: 1
+      }
+    }
   }
 </script>
 
@@ -38,16 +60,9 @@
     .inner {
         display: inline-block;
     }
-
-    .title {
-        text-align: center;
-        color: #5E8479;
-        font-weight: bolder;
-        font-size: 24px;
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        height: 56px;
-        line-height: 56px;
-        border: 1px dashed #5E8479;
-        border-radius: 6px;
+    .use {
+        min-height: 200px;
+        border: 1px solid black;
     }
+
 </style>

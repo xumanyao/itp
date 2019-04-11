@@ -208,6 +208,7 @@
         width: 100%;
         display: flex;
         justify-content: center;
+        font-weight: bold !important;
     }
 
     .table-wrapper {

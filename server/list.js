@@ -3,6 +3,7 @@ const model = require('./model')
 const List = model.getModel('list')
 const Type = model.getModel('type')
 const Installed = model.getModel('installed')
+const Data = model.getModel('data')
 const Router = express.Router()
 Router.get('/getList', (req, res) => {
   // const userModel = new List({name: '电流表', ip: '192.169.1.139:121'})
@@ -61,7 +62,12 @@ Router.post('/delete', (req, res) => {
     if (err) {
       return res.json({code: 1, msg: '卸载失败，请重试！'})
     }
-    return res.json({code: 0, msg: 'success', ip: doc.ip})
+    Data.findOneAndDelete({ip: data.ip}, (err, doc) => {
+      if (err) {
+        return res.json({code: 1, msg: '删除配置文件失败，请联系后台管理人员！'})
+      }
+      return res.json({code: 0, msg: 'success', ip: doc.ip})
+    })
   })
 })
 
@@ -100,11 +106,20 @@ Router.post('/operating', (req, res) => {
 
 Router.post('/saveOperating', (req, res) => {
   let data = {name: req.body.data.name, ip: req.body.data.ip}
-  Installed.update(data, req.body.data, (err, doc) => {
+  Installed.findOneAndUpdate(data, req.body.data, (err, doc) => {
     if (err) {
       res.json({code: 1, msg: '保存数据失败，请重试！'})
     }
     res.json({code: 0, msg: 'success', data: doc})
+    if (data.name === '万用表' && req.body.data.function[0] !== doc.function[0]) {
+      console.log('will update range')
+      let init = {name: data.name, ip: data.ip, data: {range: [0, 0]}}
+      Data.findOneAndUpdate(data, init, {new: true}, (err, doc) => {
+        if (err) {
+          console.log(err)
+        }
+      })
+    }
   })
 })
 

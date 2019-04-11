@@ -16,10 +16,66 @@ const winURL = process.env.NODE_ENV === 'development'
   : `file://${__dirname}/index.html`
 const template = [
   {
-    label: '操作',
-    click: function parentClick () {
-      console.log('click the parent tab!')
-    },
+    label: '应用',
+    submenu: [
+      {
+        label: '最小化',
+        role: 'minimize'
+      },
+      {
+        label: '重启',
+        click: relaunch
+      },
+      {
+        label: '退出',
+        role: 'quit'
+      }
+    ]
+  },
+  {
+    label: '视图',
+    submenu: [
+      {
+        label: '全屏',
+        type: 'checkbox',
+        role: 'toggleFullScreen'
+      },
+      /* {
+        label: '主题',
+        submenu: [
+          {
+            label: '黑',
+            type: 'radio',
+            click: () => setTheme('black')
+          },
+          {
+            label: '白',
+            type: 'radio',
+            checked: true,
+            click: () => setTheme('white')
+          },
+          {
+            label: '灰',
+            type: 'radio',
+            click: () => setTheme('gray')
+          }
+        ]
+      }, */
+      {
+        label: '放大',
+        role: 'zoomin'
+      },
+      {
+        label: '缩小',
+        role: 'zoomout'
+      },
+      {
+        label: '重置缩放比例',
+        role: 'resetzoom'
+      }
+    ]
+  }, {
+    label: '功能',
     submenu: [
       {
         label: '查询仪器类型',
@@ -27,9 +83,31 @@ const template = [
       }, {
         label: '查询仪器列表',
         click: getList // 单击时的回调
+      },
+      {
+        label: '开发者工具',
+        role: 'toggledevtools',
+        type: 'checkbox',
+        checked: true
+      }
+    ]
+  }, {
+    label: '帮助',
+    submenu: [
+      {
+        label: '使用文档',
+        click: () => {
+          mainWindow.webContents.send('infoType', 'useText')
+        }
+      }, {
+        label: '反馈',
+        click: () => {
+          mainWindow.webContents.send('infoType', 'feedback')
+        }
       }
     ]
   }
+
 ]
 
 function createWindow () {
@@ -59,6 +137,27 @@ function getList () { // 路由切换
 function getType () {
   mainWindow.webContents.send('goType', true)
 }
+
+function relaunch () {
+  app.relaunch()
+  app.exit(0)
+}
+
+/* function setTheme (color) {
+  console.log(color)
+  let theme = null
+  switch (color) {
+    case 'white':
+      theme = '#fff'
+      break
+    case 'black':
+      theme = '#000'
+      break
+    case 'gray' :
+      theme = '#939393'
+  }
+  mainWindow.setBackgroundColor(theme)
+} */
 
 app.commandLine.appendSwitch('--disable-http-cache')
 app.on('ready', createWindow)
